@@ -1,0 +1,80 @@
+import React from "react";
+
+const Login = () => {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-white px-4">
+      <div className="w-full max-w-[360px]">
+
+        {/* ZARA Logo */}
+        <div className="text-center mb-14">
+          <h1 className="text-4xl font-light tracking-[0.35em] text-black">
+            ZARA
+          </h1>
+          <p className="text-[11px] text-gray-500 tracking-widest mt-3 uppercase">
+            Sign in to your account
+          </p>
+        </div>
+
+        {/* Form */}
+        <form className="space-y-8">
+
+          {/* Email */}
+          <div>
+            <label className="block text-[10px] text-gray-500 tracking-widest uppercase mb-2">
+              Email
+            </label>
+            <input
+              type="email"
+              placeholder="you@email.com"
+              className="w-full border-b border-black py-3 text-sm bg-transparent focus:outline-none placeholder-gray-400"
+            />
+          </div>
+
+          {/* Password */}
+          <div>
+            <label className="block text-[10px] text-gray-500 tracking-widest uppercase mb-2">
+              Password
+            </label>
+            <input
+              type="password"
+              placeholder="Enter password"
+              className="w-full border-b border-black py-3 text-sm bg-transparent focus:outline-none placeholder-gray-400"
+            />
+          </div>
+
+          {/* Forgot */}
+          <div className="text-right">
+            <a
+              href="/forgot-password"
+              className="text-[11px] text-gray-500 tracking-wide hover:underline"
+            >
+              FORGOT PASSWORD?
+            </a>
+          </div>
+
+          {/* Button */}
+          <button
+            type="submit"
+            className="w-full border border-black py-3 text-[12px] tracking-widest uppercase text-black hover:bg-black hover:text-white transition"
+          >
+            Continue
+          </button>
+
+        </form>
+
+        {/* Footer */}
+        <div className="mt-14 text-center">
+          <p className="text-[11px] text-gray-500 tracking-wide">
+            Don’t have an account?{" "}
+            <a href="/register" className="text-black hover:underline">
+              Create one
+            </a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default Login;

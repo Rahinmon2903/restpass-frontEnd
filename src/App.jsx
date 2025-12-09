@@ -6,6 +6,7 @@ import Register from '../Pages/Register';
 import NotFound from '../Pages/NotFound';
 import Login from '../Pages/Login';
 import ForgotPassword from '../Pages/ForgotPassword';
+import ResetPassword from '../Pages/ResetPassword';
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
       <Route path='*' element={<NotFound/>}></Route>
       <Route path='/login' element={<Login/>}></Route>
        <Route path='/forgot-password' element={<ForgotPassword/>}></Route>
+              <Route path='/reset-password' element={<ResetPassword/>}></Route>
     </Routes>
     </BrowserRouter>
      

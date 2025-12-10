@@ -1,6 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
+
+import { useNavigate, useParams } from "react-router-dom";
+import api from "../Service/api.js";
+import { toast } from "react-toastify";
 
 const ResetPassword = () => {
+    const [password, setPassword] = useState("");
+    const [password1, setPassword1] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+        const navigate = useNavigate();
+    
+    
+      const [error, setError] = useState(null);
+       const { id, token } = useParams(); 
+    
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (password !== password1) {
+          setError("Passwords do not match");
+          return;
+        }
+        try {
+            
+            const response=await api.post(`/auth/reset-password/${id}/${token}`,{password});
+            
+            toast.success(response.data.message);
+          setError(null);
+          navigate("/login");
+        } catch (error) {
+          const msg = error.response?.data?.message || "Registration failed";
+          toast.error(msg);
+          setError(msg);
+        }
+         setPassword("");
+        setPassword1("");
+      
+      };
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-[340px]">
@@ -11,27 +46,62 @@ const ResetPassword = () => {
             ZARA
           </h1>
         </div>
+         {error && (
+          <p className="text-[11px] text-red-600 tracking-wide text-center mt-6">
+            {error}
+          </p>
+        )}
 
         {/* Form */}
-        <form className="space-y-12">
+        <form className="space-y-12" onSubmit={handleSubmit}>
 
           {/* New Password */}
-          <div>
+          <div className="relative">
+            <label className="block text-[10px] text-gray-500 tracking-widest uppercase mb-2">
+              New Password
+            </label>
+
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="New password"
-              className="w-full border-b border-black py-3 text-sm bg-transparent focus:outline-none placeholder-gray-400"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full border-b border-black py-3 text-sm bg-transparent focus:outline-none placeholder-gray-400 pr-12"
             />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-0 top-7 text-[10px] tracking-widest uppercase text-gray-500 hover:text-black transition"
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
           </div>
 
+
           {/* Confirm New Password */}
-          <div>
+           <div className="relative">
+            <label className="block text-[10px] text-gray-500 tracking-widest uppercase mb-2">
+              Confirm Password
+            </label>
+
             <input
-              type="password"
-              placeholder="Confirm new password"
-              className="w-full border-b border-black py-3 text-sm bg-transparent focus:outline-none placeholder-gray-400"
+              type={showPassword ? "text" : "password"}
+              placeholder="Confirm password"
+              value={password1}
+              onChange={(e) => setPassword1(e.target.value)}
+              className="w-full border-b border-black py-3 text-sm bg-transparent focus:outline-none placeholder-gray-400 pr-12"
             />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-0 top-7 text-[10px] tracking-widest uppercase text-gray-500 hover:text-black transition"
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
           </div>
+
 
           {/* Button */}
           <button

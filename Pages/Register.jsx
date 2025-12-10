@@ -25,6 +25,7 @@ const Register = () => {
         password,
       });
       toast.success(response.data.message);
+       setError(null);
       navigate("/login");
     } catch (error) {
       const msg = error.response?.data?.message || "Registration failed";

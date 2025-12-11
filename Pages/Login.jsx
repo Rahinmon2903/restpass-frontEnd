@@ -23,6 +23,7 @@ const Login = () => {
         localStorage.setItem("token",response.data.token);
         toast.success(response.data.message);
       setError(null);
+      navigate("/welcome");
     } catch (error) {
       const msg = error.response?.data?.message || "Registration failed";
       toast.error(msg);
@@ -114,7 +115,7 @@ const Login = () => {
         <div className="mt-14 text-center">
           <p className="text-[11px] text-gray-500 tracking-wide">
             Don’t have an account?{" "}
-            <a href="/register" className="text-black hover:underline">
+            <a href="/" className="text-black hover:underline">
               Create one
             </a>
           </p>

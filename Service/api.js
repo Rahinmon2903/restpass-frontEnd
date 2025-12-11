@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const api =axios.create({
-    baseURL:"https://back-endcode-restpass.onrender.com"
+    baseURL:"https://back-endcode-restpass.onrender.com/api"
 });
 
 api.interceptors.request.use(

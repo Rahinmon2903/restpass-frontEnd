@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../Service/api.js";
+import api from "../src/service/api.js";
 import { toast } from "react-toastify";
 
 const ForgotPassword = () => {

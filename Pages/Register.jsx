@@ -39,6 +39,7 @@ const Register = ({setLoading}) => {
       const msg = error.response?.data?.message || "Registration failed";
       toast.error(msg);
       setError(msg);
+      setLoading(false);
      
     } 
       

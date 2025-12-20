@@ -33,6 +33,7 @@ const Login = ({setLoading}) => {
       const msg = error.response?.data?.message || "Login failed";
       toast.error(msg);
       setError(msg);
+      setLoading(false);
      
     }
      setEmail("");

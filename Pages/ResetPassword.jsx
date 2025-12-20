@@ -39,8 +39,11 @@ const ResetPassword = ({ setLoading }) => {
       const msg = error.response?.data?.message || "Password reset failed";
       toast.error(msg);
       setError(msg);
-      setLoading(false);
+      
     
+    }finally {
+      setLoading(false);
+      
     }
     setPassword("");
     setPassword1("");

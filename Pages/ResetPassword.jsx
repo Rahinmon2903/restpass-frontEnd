@@ -1,52 +1,59 @@
 import React, { useState } from "react";
 
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../src/service/api.js";
 import { toast } from "react-toastify";
 
-const ResetPassword = () => {
-    const [password, setPassword] = useState("");
-    const [password1, setPassword1] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
-        const navigate = useNavigate();
+const ResetPassword = ({ setLoading }) => {
+  const [password, setPassword] = useState("");
+  const [password1, setPassword1] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const [error, setError] = useState(null);
+  const { id, token } = useParams();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!password || !password1) {
+      setError("Enter both passwords");
+      return;
+    }
+    if (password !== password1) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await api.post(`/auth/reset-password/${id}/${token}`, {
+        password,
+      });
+
+      toast.success(response.data.message);
+      setError(null);
+      navigate("/login");
+      setLoading(false);
+    } catch (error) {
+      const msg = error.response?.data?.message || "Password reset failed";
+      toast.error(msg);
+      setError(msg);
     
-    
-      const [error, setError] = useState(null);
-       const { id, token } = useParams(); 
-    
-      const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (password !== password1) {
-          setError("Passwords do not match");
-          return;
-        }
-        try {
-            
-            const response=await api.post(`/auth/reset-password/${id}/${token}`,{password});
-            
-            toast.success(response.data.message);
-          setError(null);
-          navigate("/login");
-        } catch (error) {
-          const msg = error.response?.data?.message || "Registration failed";
-          toast.error(msg);
-          setError(msg);
-        }
-         setPassword("");
-        setPassword1("");
-      
-      };
+    }
+    setPassword("");
+    setPassword1("");
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-[340px]">
-
         {/* Brand */}
         <div className="text-center mb-20">
           <h1 className="text-4xl font-light tracking-[0.35em] text-black">
             ZARA
           </h1>
         </div>
-         {error && (
+        {error && (
           <p className="text-[11px] text-red-600 tracking-wide text-center mt-6">
             {error}
           </p>
@@ -54,7 +61,6 @@ const ResetPassword = () => {
 
         {/* Form */}
         <form className="space-y-12" onSubmit={handleSubmit}>
-
           {/* New Password */}
           <div className="relative">
             <label className="block text-[10px] text-gray-500 tracking-widest uppercase mb-2">
@@ -78,9 +84,8 @@ const ResetPassword = () => {
             </button>
           </div>
 
-
           {/* Confirm New Password */}
-           <div className="relative">
+          <div className="relative">
             <label className="block text-[10px] text-gray-500 tracking-widest uppercase mb-2">
               Confirm Password
             </label>
@@ -102,7 +107,6 @@ const ResetPassword = () => {
             </button>
           </div>
 
-
           {/* Button */}
           <button
             type="submit"
@@ -110,19 +114,17 @@ const ResetPassword = () => {
           >
             Reset Password
           </button>
-
         </form>
 
         {/* Footer */}
         <div className="mt-20 text-center">
           <p className="text-[11px] text-gray-500 tracking-wide">
             Back to{" "}
-            <a href="/login" className="text-black hover:underline">
+            <Link to="/login" className="text-black hover:underline">
               Sign in
-            </a>
+            </Link>
           </p>
         </div>
-
       </div>
     </div>
   );

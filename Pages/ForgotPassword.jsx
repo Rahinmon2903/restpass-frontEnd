@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../src/service/api.js";
 import { toast } from "react-toastify";
 
-const ForgotPassword = () => {
+const ForgotPassword = ({setLoading}) => {
 
     const [email, setEmail] = useState("");
     const navigate = useNavigate();
@@ -17,16 +17,21 @@ const ForgotPassword = () => {
       setError("Enter email");
       return;
     }
+
+    setLoading(true);
+    setError(null);
     try {
         const response=await api.post("/auth/forgot-password",{email});
         
         toast.success(response.data.message);
       setError(null);
       navigate("/login");
+      setLoading(false);
     } catch (error) {
-      const msg = error.response?.data?.message || "Registration failed";
+      const msg = error.response?.data?.message || "Failed to send reset email";
       toast.error(msg);
       setError(msg);
+      
     }
      setEmail("");
   
@@ -77,9 +82,9 @@ const ForgotPassword = () => {
         <div className="mt-20 text-center">
           <p className="text-[11px] text-gray-500 tracking-wide">
             Remembered your password?{" "}
-            <a href="/login" className="text-black hover:underline">
+            <Link to="/login" className="text-black hover:underline">
               Sign in
-            </a>
+            </Link>
           </p>
         </div>
 

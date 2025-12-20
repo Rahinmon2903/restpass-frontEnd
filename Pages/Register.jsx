@@ -1,46 +1,60 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../src/service/api.js";
 
-const Register = () => {
+const Register = ({setLoading}) => {
   const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!name || !email || !password) {
       setError("Enter all credentials");
+     
       return;
     }
+
+    setLoading(true);
+    setError(null);
+
     try {
       const response = await api.post("/auth/register", {
         name,
         email,
         password,
       });
+
       toast.success(response.data.message);
-       setError(null);
       navigate("/login");
+      setLoading(false);
     } catch (error) {
       const msg = error.response?.data?.message || "Registration failed";
       toast.error(msg);
       setError(msg);
-    }
-
+     
+    } 
+      
+    
     setName("");
     setEmail("");
     setPassword("");
   };
+
+
+  
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-[360px]">
-        {/* ZARA Logo */}
+        {/* Logo */}
         <div className="text-center mb-14">
           <h1 className="text-4xl font-light tracking-[0.35em] text-black">
             ZARA
@@ -49,8 +63,9 @@ const Register = () => {
             Create a new account
           </p>
         </div>
+
         {error && (
-          <p className="text-[11px] text-red-600 tracking-wide text-center mt-6">
+          <p className="text-[11px] text-red-600 tracking-wide text-center mb-6">
             {error}
           </p>
         )}
@@ -64,7 +79,6 @@ const Register = () => {
             </label>
             <input
               type="text"
-              name="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your name"
@@ -79,7 +93,6 @@ const Register = () => {
             </label>
             <input
               type="email"
-              name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@email.com"
@@ -110,7 +123,7 @@ const Register = () => {
             </button>
           </div>
 
-          {/* Button */}
+          {/* Submit */}
           <button
             type="submit"
             className="w-full border border-black py-3 text-[12px] tracking-widest uppercase text-black hover:bg-black hover:text-white transition"
@@ -123,9 +136,9 @@ const Register = () => {
         <div className="mt-14 text-center">
           <p className="text-[11px] text-gray-500 tracking-wide">
             Already have an account?{" "}
-            <a href="/login" className="text-black hover:underline">
+            <Link to="/login" className="text-black hover:underline">
               Sign in
-            </a>
+            </Link>
           </p>
         </div>
       </div>

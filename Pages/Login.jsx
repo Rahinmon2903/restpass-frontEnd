@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import api from "../src/service/api.js";
 
-const Login = () => {
+const Login = ({setLoading}) => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -16,18 +16,24 @@ const Login = () => {
     e.preventDefault();
     if (!email || !password) {
       setError("Enter all credentials");
+     
       return;
     }
+
+    setLoading(true);
+    setError(null);
     try {
         const response=await api.post("/auth/login",{email,password})
         localStorage.setItem("token",response.data.token);
         toast.success(response.data.message);
       setError(null);
       navigate("/welcome");
+      setLoading(false);
     } catch (error) {
-      const msg = error.response?.data?.message || "Registration failed";
+      const msg = error.response?.data?.message || "Login failed";
       toast.error(msg);
       setError(msg);
+     
     }
      setEmail("");
     setPassword("");
@@ -94,12 +100,12 @@ const Login = () => {
 
           {/* Forgot */}
           <div className="text-right">
-            <a
-              href="/forgot-password"
+            <Link
+              to="/forgot-password"
               className="text-[11px] text-gray-500 tracking-wide hover:underline"
             >
               FORGOT PASSWORD?
-            </a>
+            </Link>
           </div>
 
           {/* Button */}
@@ -115,9 +121,9 @@ const Login = () => {
         <div className="mt-14 text-center">
           <p className="text-[11px] text-gray-500 tracking-wide">
             Don’t have an account?{" "}
-            <a href="/" className="text-black hover:underline">
+            <Link to="/" className="text-black hover:underline">
               Create one
-            </a>
+            </Link>
           </p>
         </div>
       </div>
